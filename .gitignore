@@ -1,0 +1,23 @@
+
+# Downloaded images
+/img/*
+!/img/.gitkeep
+
+# Temporary download files
+*.part
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
