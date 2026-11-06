@@ -1,23 +1,29 @@
-
-# Downloaded images
+# Original high-resolution images (do not commit to Git)
 /img/*
 !/img/.gitkeep
 
-# Temporary download files
+# Temporary download and processing files
 *.part
+*.tmp
 
-# Python cache
+# Python cache and build artifacts
 __pycache__/
 *.py[cod]
+*$py.class
 
 # Virtual environments
 .venv/
 venv/
+env/
 
-# Environment files
+# Environment variables
 .env
 .env.*
 
-# OS files
+# IDE and editor directories
+.vscode/
+.idea/
+
+# OS generated files
 .DS_Store
 Thumbs.db

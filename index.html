@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technology Olympiad - Day 2 Photo Gallery</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <main class="gallery-container">
+    <div id="gallery-grid" class="gallery-grid" aria-live="polite"></div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="Image Viewer">
+    <!-- Top Autoplay Progress Bar -->
+    <div id="autoplay-progress-container" class="autoplay-progress-container hidden">
+      <div id="autoplay-progress-bar" class="autoplay-progress-bar"></div>
+    </div>
+
+    <!-- Main Viewer Area (shrinks when info sidebar opens) -->
+    <div id="lightbox-main" class="lightbox-main">
+      <!-- Top Bar -->
+      <header class="lightbox-topbar">
+        <div id="lightbox-counter" class="lightbox-counter">1 / 1</div>
+        <div class="lightbox-actions">
+          <!-- Play / Pause Button -->
+          <button id="btn-play" class="icon-btn" type="button" title="Play Slideshow" aria-label="Play Slideshow">
+            <svg id="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"></polygon>
+            </svg>
+            <svg id="icon-pause" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="10" y1="9" x2="10" y2="15"></line>
+              <line x1="14" y1="9" x2="14" y2="15"></line>
+            </svg>
+          </button>
+
+          <!-- Download Original Image Button -->
+          <a id="btn-download" class="icon-btn" href="#" target="_blank" rel="noopener noreferrer" download title="Download Original" aria-label="Download Original">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v13"></path>
+              <polyline points="7 11 12 16 17 11"></polyline>
+              <line x1="5" y1="20" x2="19" y2="20"></line>
+            </svg>
+          </a>
+
+          <!-- Image Information Button -->
+          <button id="btn-info" class="icon-btn" type="button" title="Image Information" aria-label="Image Information">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </button>
+
+          <!-- Close Lightbox Button -->
+          <button id="btn-close" class="icon-btn" type="button" title="Close" aria-label="Close Viewer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Stage Area -->
+      <div id="lightbox-stage" class="lightbox-stage">
+        <button id="btn-prev" class="nav-btn nav-prev" type="button" title="Previous" aria-label="Previous Image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+
+        <div class="stage-image-wrapper">
+          <div id="stage-loader" class="stage-loader hidden"></div>
+          <img id="lightbox-img" class="lightbox-img" src="" alt="" />
+        </div>
+
+        <button id="btn-next" class="nav-btn nav-next" type="button" title="Next" aria-label="Next Image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Bottom Thumbnail Filmstrip & Toggle Button -->
+      <div id="filmstrip-wrapper" class="filmstrip-wrapper">
+        <button id="btn-toggle-thumbs" class="toggle-thumbs-btn" type="button" title="Toggle Thumbnails" aria-label="Toggle Thumbnails">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="5" width="5" height="5" rx="1"></rect>
+            <rect x="9.5" y="5" width="5" height="5" rx="1"></rect>
+            <rect x="16" y="5" width="5" height="5" rx="1"></rect>
+            <rect x="3" y="12" width="5" height="5" rx="1"></rect>
+            <rect x="9.5" y="12" width="5" height="5" rx="1"></rect>
+            <rect x="16" y="12" width="5" height="5" rx="1"></rect>
+          </svg>
+        </button>
+        <div id="filmstrip" class="filmstrip"></div>
+      </div>
+    </div>
+
+    <!-- Right Information Sidebar -->
+    <aside id="info-sidebar" class="info-sidebar hidden" aria-label="Image Information">
+      <div class="info-header">
+        <h2 class="info-title">Image Information</h2>
+        <button id="btn-close-info" class="icon-btn" type="button" title="Close Information" aria-label="Close Information">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="info-body">
+        <p class="info-row">
+          <span class="info-label">Filename:</span>
+          <span id="info-filename" class="info-value">-</span>
+        </p>
+        <p class="info-row">
+          <span class="info-label">Size:</span>
+          <span id="info-size" class="info-value">-</span>
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <script src="assets/js/gallery.js"></script>
+</body>
+</html>
